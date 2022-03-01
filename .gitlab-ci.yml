@@ -1,0 +1,5 @@
+include:
+  - project: 'other/doc'
+    ref: $DEVOPS_STABLE_DOC_REF
+    file:
+      - 'DevOps/Pipelines/sonarqube.yml'

@@ -1,0 +1,4 @@
+{
+  "extends": "@kilohealth",
+  "parser": "@typescript-eslint/parser"
+}
