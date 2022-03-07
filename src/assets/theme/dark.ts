@@ -5,7 +5,7 @@ export const darkTheme: DefaultTheme = {
   colors: {
     primary: '#29C0CD',
     secondary: '#31C062',
-
+    blue: '#027AFF',
     primaryContent: '#FFFFFF',
     invertedContent: '#222222',
     green: '#31C062',

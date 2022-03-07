@@ -48,7 +48,7 @@ declare module 'styled-components/native' {
 export interface AppColors {
   primary: string;
   secondary: string;
-
+  blue: string;
   primaryContent: string;
   invertedContent: string;
   green: string;
