@@ -3,13 +3,13 @@ import { Animated, Easing } from 'react-native';
 import styled from 'styled-components/native';
 
 const PressableWrapper = styled.Pressable`
-  width: 20;
-  height: 20;
+  width: 20px;
+  height: 20px;
   flex-direction: row;
   align-items: center;
   justify-content: center;
   position: relative;
-  border-radius: 4;
+  border-radius: 4px;
   border-width: 1px;
   background-color: ${props => (!props.checked ? '#D8DDE8' : '#fff')};
   border-color: ${props => props.outlineColor};
@@ -24,11 +24,11 @@ const SidesWrapper = styled.View`
 const SidesView = styled.View`
   background-color: #027aff;
   position: absolute;
-  top: 2;
+  top: 2px;
   transform: rotate(-45deg);
-  height: ${props => props.height};
-  width: ${props => props.width};
-  left: ${props => props.left};
+  height: ${props => props.height}px;
+  width: ${props => props.width}px;
+  left: ${props => props.left}px;
 `;
 
 const AnimatedSidesView = Animated.createAnimatedComponent(SidesView);

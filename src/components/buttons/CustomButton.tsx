@@ -1,22 +1,18 @@
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Animated } from 'react-native';
 import styled from 'styled-components/native';
-
-import Icon from '../Icon';
-import CheckBox from '../CheckBox';
 import { useTheme } from '@assets/theme';
+
+import CheckBox from '../CheckBox';
+import Icon from '../Icon';
 
 const ButtonTitle = styled.Text`
   font-size: 18px;
   text-align: center;
-  font-family: 'Lato-Black';
-  margin-left: ${props => (props.type === 'multiple' ? 16 : 0)}px;
-  color: ${props => props.color};
-  font-weight: ${props =>
-    (props.type === 'multiple' && props.pressed) ||
-    props.type.match(/single|simple/g)
-      ? 'bold'
-      : 'normal'};
+  font-family: ${({ isBold }) => (isBold ? 'Lato-Bold' : 'Lato-Regular')};
+  font-weight: ${({ isBold }) => (isBold ? 'bold' : 'normal')};
+  margin-left: ${({ type }) => (type === 'multiple' ? 16 : 0)}px;
+  color: ${({ color }) => color};
 `;
 
 const PressableWrapper = styled.Pressable`
@@ -27,23 +23,12 @@ const PressableWrapper = styled.Pressable`
   align-items: center;
   padding-left: 16px;
   padding-right: 20px;
-  flex-direction: ${props => (props.type === 'single' ? 'row-reverse' : 'row')};
-  elevation: 1;
-  justify-content: ${props => props.justify};
+  elevation: 4;
+  justify-content: ${({ justify }) => justify};
+  background: ${({ background }) => background};
+  opacity: ${({ disabled }) => (disabled ? 0.5 : 1)};
+  flex-direction: ${({ type }) => (type === 'single' ? 'row-reverse' : 'row')};
 `;
-
-const buttonTypeStyling = {
-  colors: {
-    multiple: ['#222222', '#fff'],
-    single: ['#027AFF', '#fff'],
-    simple: ['#fff', '#027AFF'],
-  },
-  textAlignment: {
-    multiple: 'flex-start',
-    single: 'space-between',
-    simple: 'center',
-  },
-};
 
 const AnimatedPressable = Animated.createAnimatedComponent(PressableWrapper);
 
@@ -61,6 +46,9 @@ interface CustomButtonProps {
   title: string;
   type: string;
   iconName: string;
+  disabled: boolean;
+  checkAll: boolean | null;
+  containerStyles: any;
 }
 
 export const CustomButton: React.FC<CustomButtonProps> = ({
@@ -68,6 +56,9 @@ export const CustomButton: React.FC<CustomButtonProps> = ({
   title,
   type = 'simple',
   iconName = 'chevron-right',
+  disabled = false,
+  checkAll = null,
+  containerStyles = {},
 }) => {
   const [pressed, setPressed] = useState(false);
   const [checked, setChecked] = useState(false);
@@ -90,10 +81,17 @@ export const CustomButton: React.FC<CustomButtonProps> = ({
   };
 
   const backgroundRanges = [backgroundPrimary, blue];
+
+  const isBold = useMemo(
+    () => (type === 'multiple' && pressed) || type.match(/single|simple/g),
+    [type, pressed],
+  );
+
   const outputRange = useMemo(
     () => (type === 'simple' ? backgroundRanges.reverse() : backgroundRanges),
     [type],
   );
+
   const mainAnimation = toValue =>
     Animated.timing(animatedValue1, {
       toValue,
@@ -118,13 +116,21 @@ export const CustomButton: React.FC<CustomButtonProps> = ({
     [type, pressed],
   );
 
+  useEffect(() => {
+    if (typeof checkAll === 'boolean') {
+      setChecked(checkAll);
+    }
+  }, [checkAll]);
+
   return (
     <AnimatedPressable
+      disabled={disabled}
       type={type}
       justify={justify}
       background={animatedBackground}
       style={{
         backgroundColor: animatedBackground,
+        ...containerStyles,
       }}
       onPressIn={() => {
         setPressed(true);
@@ -140,7 +146,6 @@ export const CustomButton: React.FC<CustomButtonProps> = ({
 
       {type === 'multiple' && (
         <CheckBox
-          //
           onClearCheck={[clearAnimation]}
           onFillCheck={[fillAnimation]}
           onCheckedChange={onCheckedChange}
@@ -148,7 +153,7 @@ export const CustomButton: React.FC<CustomButtonProps> = ({
           setChecked={setChecked}
         />
       )}
-      <ButtonTitle type={type} pressed={pressed} color={color}>
+      <ButtonTitle isBold={isBold} type={type} pressed={pressed} color={color}>
         {title}
       </ButtonTitle>
     </AnimatedPressable>

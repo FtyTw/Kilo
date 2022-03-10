@@ -13,7 +13,7 @@ import { PersistedAppState, rootReducer, RootState } from './reducers';
 const persistorConfig = {
   key: '@<YourAppName>:state',
   storage: storage,
-  whitelist: ['app'],
+  whitelist: ['app', 'questions', 'answers'],
 };
 
 export const configStore = (initialState?: PersistedAppState) => {
