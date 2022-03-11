@@ -23,9 +23,11 @@ export const useAnswersActions = () => {
     dispatch(actions.answers.addAnswer(payload));
   const removeAnswerAction = payload =>
     dispatch(actions.answers.removeAnswer(payload));
+  const clearAnswerAction = () => dispatch(actions.answers.clearAnswers());
 
   return {
     addAnswerAction,
     removeAnswerAction,
+    clearAnswerAction,
   };
 };

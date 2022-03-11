@@ -25,11 +25,9 @@ export const QuestionsSlice = createSlice({
       state.answers.push(action.payload);
     },
     setError: (state, action) => {
-      console.log('setError');
       state.error = action.payload;
     },
     setLoading: (state, action) => {
-      console.log('setLoading');
       state.loading = action.payload;
     },
     setLastVisitedPage: (state, action) => {

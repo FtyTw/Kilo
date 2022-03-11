@@ -51,7 +51,7 @@ export const configStore = (initialState?: PersistedAppState) => {
       //    }
       //  },
       // set tags derived from state
-      configureScopeWithState: (scope, state) => {
+      configureScopeWithState: () => {
         // const userInfo = state.user.userInfo;
         // const unitSystem = userInfo?.unit_system;
         // if (unitSystem) {

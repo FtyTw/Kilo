@@ -1,10 +1,12 @@
 /* eslint-disable  react-native/no-inline-styles  */
 
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components/native';
 
 import { CustomButton } from '../components';
 import { useAnswersActions, useNavigationFuncs } from '../hooks';
+
+const { isIOS } = global;
 
 interface QuestionsProps {
   question: {
@@ -18,49 +20,52 @@ interface QuestionsProps {
 
 export const Questions: React.FC<QuestionsProps> = ({ question, quantity }) => {
   const [checkAll, setCheckAll] = useState(null);
+  const [checkedValues, setCheckedValues] = useState([]);
+  const { goToNextState, currentStep, navigateToAnswers } =
+    useNavigationFuncs();
 
-  let { current: checkedValues } = useRef([]);
-
-  const { goToNextState, currentStep } = useNavigationFuncs();
   const { addAnswerAction } = useAnswersActions();
 
-  const handleAnswers = () => {
+  const handleAnswers = (data: Array<string> | string) => {
+    const answers = Array.isArray(data) ? data : [data];
     const { key, label } = question;
-    const payload = { key, label, answers: checkedValues };
+    const payload = { key, label, answers };
     addAnswerAction(payload);
   };
-
-  const toggleAnswers = answer =>
-    (checkedValues = checkedValues.includes(answer)
-      ? checkedValues.filter(i => i !== answer)
-      : [...checkedValues, answer]);
 
   const { type, options, label } = question;
 
   const onCheckAll = () => {
     setCheckAll(true);
+    const allAnswers = options.map(({ label }) => label);
     setTimeout(() => {
-      checkedValues = options.map(({ label }) => label);
-      handleAnswers();
-      goToNextState();
+      onNextButtonClick(allAnswers);
     }, 500);
   };
 
-  const onToggleAnswers = optionLabel => {
-    toggleAnswers(optionLabel);
+  const onNextButtonClick = answers => {
+    handleAnswers(answers);
 
-    if (type === 'single') {
-      handleAnswers();
-      goToNextState();
-    }
-  };
-
-  const onNextButtonClick = () => {
     if (currentStep !== quantity) {
-      handleAnswers();
       goToNextState();
     } else {
-      console.log('navigate to answers');
+      navigateToAnswers();
+    }
+
+    setCheckedValues([]);
+  };
+
+  const onAnswerButtonClick = answer => {
+    if (type === 'single') {
+      onNextButtonClick(answer);
+    }
+
+    if (type === 'multiple') {
+      setCheckedValues(checkedValues =>
+        checkedValues.includes(answer)
+          ? checkedValues.filter(i => i !== answer)
+          : [...checkedValues, answer],
+      );
     }
   };
 
@@ -91,17 +96,18 @@ export const Questions: React.FC<QuestionsProps> = ({ question, quantity }) => {
               checkAll={checkAll}
               title={optionLabel}
               type={type}
-              onPress={() => onToggleAnswers(optionLabel)}
+              onPress={() => onAnswerButtonClick(optionLabel)}
               containerStyles={{ marginBottom: 16 }}
             />
           ))}
       </StyledScrollView>
       {type === 'multiple' && (
-        <ShadowView>
+        <ShadowView isIOS={isIOS}>
           <CustomButton
+            disabled={!checkedValues.length}
             type="simple"
             title="Next"
-            onPress={onNextButtonClick}
+            onPress={() => onNextButtonClick(checkedValues)}
             containerStyles={{ marginHorizontal: 24, marginTop: 16 }}
           />
           <IosShadowWrapper />
@@ -140,7 +146,9 @@ const StyledScrollView = styled.ScrollView.attrs(() => ({
 `;
 
 const ShadowView = styled.View`
-  box-shadow: 0px 2px 24px rgba(0, 0, 0, 0.2);
+  box-shadow: ${({ isIOS }) =>
+    isIOS ? '0px 2px 24px rgba(0,0,0,0.2)' : '0px 2px 24px'};
+
   height: 80px;
   background-color: #ffffff;
   position: relative;

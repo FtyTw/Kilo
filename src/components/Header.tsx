@@ -1,11 +1,15 @@
-import React, { useEffect } from 'react';
-import { BackHandler, SafeAreaView } from 'react-native';
+import React from 'react';
+import { SafeAreaView } from 'react-native';
 import styled from 'styled-components/native';
 import { useTheme } from '@assets/theme';
 
 import Icon from './Icon';
 import ProgressLine from './ProgressLine';
-import { useAnswersActions, useNavigationFuncs } from '../hooks';
+import {
+  useAnswersActions,
+  useFocusBackHandler,
+  useNavigationFuncs,
+} from '../hooks';
 
 interface HeaderProps {
   quantity: number;
@@ -23,15 +27,10 @@ export const Header: React.FC<HeaderProps> = ({ quantity }) => {
     removeAnswerAction(currentStateName);
     goBack();
 
-    return false;
+    return true;
   };
 
-  useEffect(() => {
-    BackHandler.addEventListener('hardwareBackPress', backAction);
-
-    return () =>
-      BackHandler.removeEventListener('hardwareBackPress', backAction);
-  }, []);
+  useFocusBackHandler(backAction);
 
   return (
     <SafeAreaView>

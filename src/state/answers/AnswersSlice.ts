@@ -11,6 +11,7 @@ export const AnswersSlice = createSlice({
   name: 'answers',
   initialState,
   reducers: {
+    clearAnswers: () => initialState,
     removeAnswer: (state, action: PayloadAction<string>) => {
       state.answers = state.answers.filter(({ key }) => key !== action.payload);
     },

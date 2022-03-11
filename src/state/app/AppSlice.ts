@@ -17,12 +17,6 @@ export const AppSlice = createSlice({
       state.needToUpdate = action.payload;
     },
 
-    getMinAppVersion: (
-      state,
-      action: PayloadAction<{
-        minAppVersion: string;
-        forceUpdateRequired: boolean;
-      }>,
-    ) => state,
+    getMinAppVersion: state => state,
   },
 });
