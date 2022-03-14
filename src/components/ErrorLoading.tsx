@@ -1,26 +1,30 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { getQuestionsAction } from '../hooks';
+import { useQuestionsActions } from '../hooks';
 
 interface ErrorLoadingProps {
   errorMessage: string;
 }
 
-export const ErrorLoading: React.FC<ErrorLoadingProps> = ({ errorMessage }) => (
-  <StyledSafeArea>
-    <StyledPressable onPress={getQuestionsAction}>
-      <StyledText>
-        Something went wrong during questions loading, to try again click the
-        button below
-      </StyledText>
+export const ErrorLoading: React.FC<ErrorLoadingProps> = ({ errorMessage }) => {
+  const { getQuestionsAction } = useQuestionsActions();
 
-      <StyledText small>Try again</StyledText>
+  return (
+    <StyledSafeArea>
+      <StyledPressable onPress={getQuestionsAction}>
+        <StyledText>
+          Something went wrong during questions loading, to try again click the
+          button below
+        </StyledText>
 
-      <StyledText small>{errorMessage}</StyledText>
-    </StyledPressable>
-  </StyledSafeArea>
-);
+        <StyledText small>Try again</StyledText>
+
+        <StyledText small>{errorMessage}</StyledText>
+      </StyledPressable>
+    </StyledSafeArea>
+  );
+};
 
 const StyledSafeArea = styled.SafeAreaView`
   flex: 1;

@@ -37,9 +37,6 @@ export const QuestionsSlice = createSlice({
       state.questions = action.payload;
       state.loading = false;
     },
-    questionsRequestFailed: state => {
-      state.questions = [];
-    },
     getQuestions: state => state,
   },
 });
