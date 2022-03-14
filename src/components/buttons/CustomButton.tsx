@@ -28,8 +28,11 @@ const PressableWrapper = styled.TouchableOpacity`
   background: ${({ background }) => background};
   opacity: ${({ disabled }) => (disabled ? 0.5 : 1)};
   flex-direction: ${({ type }) => (type === 'single' ? 'row-reverse' : 'row')};
-  box-shadow: ${({ isIOS }) =>
-    isIOS ? '0px 2px 24px rgba(0,0,0,0.1)' : '0px 2px 24px'};
+  ${({
+    theme: {
+      shadows: { button },
+    },
+  }) => button};
 `;
 
 const AnimatedPressable = Animated.createAnimatedComponent(PressableWrapper);

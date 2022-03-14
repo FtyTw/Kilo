@@ -26,6 +26,8 @@ declare module 'styled-components/native' {
       light: string;
       medium: string;
       strong: string;
+      custom: string;
+      button: string;
     };
     headers: {
       main: number;

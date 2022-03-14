@@ -146,13 +146,14 @@ const StyledScrollView = styled.ScrollView.attrs(() => ({
 `;
 
 const ShadowView = styled.View`
-  box-shadow: ${({ isIOS }) =>
-    isIOS ? '0px 2px 24px rgba(0,0,0,0.2)' : '0px 2px 24px'};
-
+  ${({
+    theme: {
+      shadows: { custom },
+    },
+  }) => custom};
   height: 80px;
   background-color: #ffffff;
   position: relative;
-  elevation: 6;
 `;
 
 const IosShadowWrapper = styled.View`

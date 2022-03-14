@@ -63,6 +63,12 @@ export const lightTheme: DefaultTheme = {
     strong: global.isIOS
       ? 'box-shadow: 0px 2px 6px rgba(0,0,0, 0.4)'
       : 'elevation: 4',
+    custom: global.isIOS
+      ? 'box-shadow:0px 2px 24px rgba(0,0,0,0.2)'
+      : 'elevation: 6',
+    button: global.isIOS
+      ? 'box-shadow:0px 2px 24px rgba(0,0,0,0.1)'
+      : 'elevation: 5',
   },
   headers: global.hasNotch
     ? {
