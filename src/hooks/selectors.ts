@@ -1,6 +1,10 @@
 import { useSelector } from 'react-redux';
 
-import { selectAnswers, selectQuestions } from '../state/selectors';
+import {
+  selectAnswers,
+  selectGesture,
+  selectQuestions,
+} from '../state/selectors';
 
 export const useAnswers = () => {
   const { answers } = useSelector(selectAnswers);
@@ -12,4 +16,10 @@ export const useQuestions = () => {
   const questionState = useSelector(selectQuestions);
 
   return questionState;
+};
+
+export const useDirection = () => {
+  const direction = useSelector(selectGesture);
+
+  return direction;
 };

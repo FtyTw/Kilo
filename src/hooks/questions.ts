@@ -2,10 +2,12 @@ import { useNavigation, useNavigationState } from '@react-navigation/native';
 
 import { Route } from '../routes/RouteNames';
 import { useQuestions } from './selectors';
+import { useAppSliceActions } from './dispatchers';
 
 export const useNavigationFuncs = () => {
   const navigation = useNavigation();
   const index = useNavigationState(({ index }) => index);
+  const { gestureDirectionAction } = useAppSliceActions();
 
   const { questions, visited_page } = useQuestions();
   const storedStepIndex = questions.findIndex(
@@ -33,18 +35,22 @@ export const useNavigationFuncs = () => {
   const navigateToAnswers = () => navigation.navigate(Route.Answers);
 
   const navigateToFirstQuestion = () => {
+    gestureDirectionAction(false);
     const { key: firstRoute } = questions[0];
 
     navigation.navigate(firstRoute);
   };
 
   const goToStepBeforeCurrent = () => {
+    gestureDirectionAction(true);
+
     if (questions[currentIndex - 1]) {
       navigation.push(questions[currentIndex - 1].key);
     }
   };
 
   const goToNextState = () => {
+    gestureDirectionAction(false);
     const { key: nextStateName } = questions[currentIndex + 1];
 
     navigation.navigate(nextStateName);

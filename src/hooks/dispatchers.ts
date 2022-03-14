@@ -31,3 +31,15 @@ export const useAnswersActions = () => {
     clearAnswerAction,
   };
 };
+
+export const useAppSliceActions = () => {
+  const dispatch = useDispatch();
+  const gestureDirectionAction = (payload: boolean) =>
+    dispatch(
+      actions.app.setGestureDirection(
+        `horizontal${payload ? '-inverted' : ''}`,
+      ),
+    );
+
+  return { gestureDirectionAction };
+};

@@ -7,6 +7,7 @@ import Icon from './Icon';
 import ProgressLine from './ProgressLine';
 import {
   useAnswersActions,
+  useAppSliceActions,
   useFocusBackHandler,
   useNavigationFuncs,
 } from '../hooks';
@@ -22,8 +23,10 @@ export const Header: React.FC<HeaderProps> = ({ quantity }) => {
   const {
     colors: { primaryContent },
   } = useTheme();
+  const { gestureDirectionAction } = useAppSliceActions();
 
   const backAction = () => {
+    gestureDirectionAction(true);
     removeAnswerAction(currentStateName);
     goBack();
 

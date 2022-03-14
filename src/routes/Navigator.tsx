@@ -11,7 +11,7 @@ import {
 import { Answers, Questions, Quiz } from '../containers';
 import { ErrorLoading, Header, LoadingState } from '../components';
 import { Route } from './RouteNames';
-import { useQuestions, useQuestionsActions } from '../hooks';
+import { useDirection, useQuestions, useQuestionsActions } from '../hooks';
 
 let currentRouteName = 'unknown';
 let previousRouteName = 'unknown';
@@ -19,13 +19,14 @@ let previousRouteName = 'unknown';
 export const getCurrentRouteName = () => currentRouteName;
 export const getPreviousRouteName = () => previousRouteName;
 
-const animationEnabled = false;
 const paddingTop = Platform.OS === 'android' ? StatusBar.currentHeight : 0;
 const QuestionsStack = createStackNavigator();
 
 const QuestionsNavigator = () => {
   const { getQuestionsAction, setQuestionsLoadingAction } =
     useQuestionsActions();
+  const direction = useDirection();
+
   const {
     questions = [],
     error = false,
@@ -46,9 +47,9 @@ const QuestionsNavigator = () => {
   const Options = {
     initialRouteName: visited_page,
     screenOptions: {
-      animationEnabled,
       header: props => <Header {...props} quantity={quantity} />,
       cardStyle: { backgroundColor: '#fff', paddingTop },
+      gestureDirection: direction,
     },
   };
 
@@ -78,6 +79,7 @@ const Navigator = () => {
   currentRouteName = visited_page || currentRouteName;
 
   const { setLastVisitedPageAction } = useQuestionsActions();
+  const direction = useDirection();
 
   const onMount = () => {
     BackHandler.addEventListener('hardwareBackPress', onAndroidBack);
@@ -123,7 +125,7 @@ const Navigator = () => {
         initialRouteName={visited_page ? Route.Questions : null}
         screenOptions={{
           headerShown: false,
-          animationEnabled,
+          gestureDirection: direction,
         }}
       >
         <Stack.Screen
