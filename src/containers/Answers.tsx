@@ -1,17 +1,17 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, { useMemo } from 'react';
 import styled from 'styled-components/native';
-import { useSelector } from 'react-redux';
 
 import { CustomButton } from '../components';
 import {
+  useAnswers,
   useAnswersActions,
   useFocusBackHandler,
   useNavigationFuncs,
 } from '../hooks';
 
 export const Answers: React.FC<{}> = () => {
-  const { answers } = useSelector(({ answers }) => answers);
+  const answers = useAnswers();
   const { clearAnswerAction } = useAnswersActions();
   const data = useMemo(
     () =>

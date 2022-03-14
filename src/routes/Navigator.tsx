@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { BackHandler, Platform, StatusBar } from 'react-native';
 import { NavigationContainer, NavigationState } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { useSelector } from 'react-redux';
 
 import {
   getActiveRouteName,
@@ -12,7 +11,7 @@ import {
 import { Answers, Questions, Quiz } from '../containers';
 import { ErrorLoading, Header, LoadingState } from '../components';
 import { Route } from './RouteNames';
-import { useQuestionsActions } from '../hooks';
+import { useQuestions, useQuestionsActions } from '../hooks';
 
 let currentRouteName = 'unknown';
 let previousRouteName = 'unknown';
@@ -29,10 +28,10 @@ const QuestionsNavigator = () => {
     useQuestionsActions();
   const {
     questions = [],
-    error = true,
-    loading = false,
+    error = false,
+    loading = true,
     visited_page = null,
-  } = useSelector(state => state.questions);
+  } = useQuestions();
 
   const onMount = () => {
     if (!questions.length) {
@@ -58,7 +57,7 @@ const QuestionsNavigator = () => {
   if (loading) {
     return <LoadingState />;
   } else if (error) {
-    return <ErrorLoading />;
+    return <ErrorLoading errorMessage={error} />;
   } else {
     return (
       <QuestionsStack.Navigator {...Options}>
@@ -75,7 +74,7 @@ const QuestionsNavigator = () => {
 };
 
 const Navigator = () => {
-  const { visited_page = null } = useSelector(state => state.questions);
+  const { visited_page = null } = useQuestions();
   currentRouteName = visited_page || currentRouteName;
 
   const { setLastVisitedPageAction } = useQuestionsActions();

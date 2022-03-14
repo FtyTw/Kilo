@@ -1,13 +1,13 @@
 import { useNavigation, useNavigationState } from '@react-navigation/native';
-import { useSelector } from 'react-redux';
 
 import { Route } from '../routes/RouteNames';
+import { useQuestions } from './selectors';
 
 export const useNavigationFuncs = () => {
   const navigation = useNavigation();
   const index = useNavigationState(({ index }) => index);
 
-  const { questions, visited_page } = useSelector(state => state.questions);
+  const { questions, visited_page } = useQuestions();
   const storedStepIndex = questions.findIndex(
     ({ key }) => key === visited_page,
   );
